@@ -90,9 +90,9 @@ install_version() {
   fi
 
   if [[ $version == 4* ]]; then
-    linux_string="x11.64"
-  else
     linux_string="linux.x86_64"
+  else
+    linux_string="x11.64"
   fi
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
