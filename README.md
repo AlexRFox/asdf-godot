@@ -15,14 +15,14 @@
 
 # Dependencies
 
-- `bash`, `curl`, `unzip`.
+- `bash`, `curl`, `unzip`, `xmllint`.
 
 # Install
 
 Plugin:
 
 ```shell
-asdf plugin add godot https://github.com/nyrst/asdf-godot.git
+asdf plugin add godot https://github.com/wrn4/asdf-godot.git
 ```
 
 godot:

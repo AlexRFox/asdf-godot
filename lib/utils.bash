@@ -26,21 +26,61 @@ list_github_tags() {
 }
 
 list_all_versions() {
+  list_sub_versions
+}
+
+list_stable_versions() {
   list_github_tags
 }
 
+list_repo_versions() {
+  curl -s "$REPO/" |
+    xmllint --html --xpath "//a/text()" - |
+    grep -P "[0-9]"
+}
+
+
+list_sub_versions() {
+  versions=`curl -s "$REPO/" |
+    xmllint --html --xpath "//a/text()" - |
+    grep -P "[0-9]" |
+    tr '\n' ' '`
+
+  for version in $versions
+  do
+    local sub_versions=`curl -s "$REPO/$version/" |
+    xmllint --html --xpath "//a/text()" - |
+    grep -P "(beta|rc|dev)" |
+    tr '\n' ' '`
+
+    for sub in $sub_versions
+    do
+      echo "${version}-${sub}"
+    done
+    echo "${version}-stable"
+  done
+
+}
+
 download_release() {
-  local version filename url
-  version="$1"
+  local version filename url release linux_string
+  version=`echo "$1" | cut -d'-' -f1`
   filename="$2"
+  release=`echo "$1" | cut -d'-' -f2`
+  linux_string="$3"
 
-  url="$REPO/${version}/Godot_v${version}-stable_x11.64.zip"
-
+  if [[ "$release" == "stable" ]]; then
+    url="$REPO/${version}/Godot_v${version}-${release}_${linux_string}.zip"
+  else
+    url="$REPO/${version}/${release}/Godot_v${version}-${release}_${linux_string}.zip"
+  fi
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
+
 install_version() {
+  local linux_string
   local install_type="$1"
   local version="$2"
   local install_path="$3"
@@ -49,12 +89,18 @@ install_version() {
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
+  if [[ $version == 4* ]]; then
+    linux_string="x11.64"
+  else
+    linux_string="linux.x86_64"
+  fi
+
   local release_file="$install_path/$TOOL_NAME-$version.zip"
   (
     mkdir -p "$install_path/bin"
-    download_release "$version" "$release_file"
+    download_release "$version" "$release_file" "$linux_string"
     unzip -qq "$release_file" -d "$install_path" || fail "Could not extract $release_file"
-    mv "$install_path/Godot_v${version}-stable_x11.64" "$install_path/bin/godot"
+    mv "$install_path/Godot_v${version}_${linux_string}" "$install_path/bin/godot"
     rm "$release_file"
 
     local tool_cmd
