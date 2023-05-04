@@ -22,42 +22,36 @@ sort_versions() {
 list_github_tags() {
   git ls-remote --tags --refs "$GH_REPO" |
     grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//;s/-stable$//'
+    sed 's/^v//'
 }
 
 list_all_versions() {
-  list_sub_versions
+  echo "$(list_github_tags)"$'\n'"$(list_sub_versions)"
 }
 
 list_stable_versions() {
   list_github_tags
 }
 
-list_repo_versions() {
-  curl -s "$REPO/" |
-    xmllint --html --xpath "//a/text()" - |
-    grep -P "[0-9]"
-}
-
-
 list_sub_versions() {
   versions=`curl -s "$REPO/" |
-    xmllint --html --xpath "//a/text()" - |
-    grep -P "[0-9]" |
-    tr '\n' ' '`
+  grep Directory |
+  grep -oP '([0-9](\.[0-9])+)' |
+  uniq |
+  tr '\n' ' '`
 
   for version in $versions
   do
     local sub_versions=`curl -s "$REPO/$version/" |
-    xmllint --html --xpath "//a/text()" - |
-    grep -P "(beta|rc|dev)" |
+    grep Directory |
+    grep -oP '(alpha|beta|rc|dev)([0-9]){0,2}' |
+    uniq |
     tr '\n' ' '`
 
     for sub in $sub_versions
     do
       echo "${version}-${sub}"
     done
-    echo "${version}-stable"
   done
 
 }

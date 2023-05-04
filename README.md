@@ -15,7 +15,7 @@
 
 # Dependencies
 
-- `bash`, `curl`, `unzip`, `xmllint`.
+- `bash`, `curl`, `unzip`.
 
 # Install
 
