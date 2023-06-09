@@ -72,7 +72,7 @@ download_release() {
   else
     url="$REPO/${version}/${release}/Godot_v${version}-${release}_${linux_string}.zip"
   fi
-  echo "* Downloading $TOOL_NAME release $version..."
+  echo "* Downloading $TOOL_NAME release $version-$release..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
