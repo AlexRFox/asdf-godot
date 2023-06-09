@@ -32,6 +32,19 @@ list_stable_versions() {
   list_github_tags
 }
 
+get_sub_versions() {
+  local sub_versions=`curl -s "$REPO/$1/" |
+    grep Directory |
+    grep -oP '(alpha|beta|rc|dev)([0-9]){0,2}' |
+    uniq |
+    tr '\n' ' '`
+
+  for sub in $sub_versions
+  do
+    echo "${1}-${sub}"
+  done
+}
+
 list_sub_versions() {
   versions=`curl -s "$REPO/" |
   grep Directory |
@@ -41,19 +54,11 @@ list_sub_versions() {
 
   for version in $versions
   do
-    local sub_versions=`curl -s "$REPO/$version/" |
-    grep Directory |
-    grep -oP '(alpha|beta|rc|dev)([0-9]){0,2}' |
-    uniq |
-    tr '\n' ' '`
-
-    for sub in $sub_versions
-    do
-      echo "${version}-${sub}"
-    done
+    get_sub_versions $version &
   done
-
+  wait
 }
+
 
 download_release() {
   local version filename url release linux_string
@@ -77,6 +82,7 @@ install_version() {
   local install_type="$1"
   local version="$2"
   local install_path="$3"
+  local regex='(alpha|beta|dev|rc)'
 
   if [ "$install_type" != "version" ]; then
     fail "asdf-$TOOL_NAME supports release installs only"
@@ -86,6 +92,10 @@ install_version() {
     linux_string="linux.x86_64"
   else
     linux_string="x11.64"
+  fi
+
+  if [[ ! $version =~ $regex ]]; then
+    version="$version-stable"
   fi
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
