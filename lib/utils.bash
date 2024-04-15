@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-GH_REPO="https://github.com/godotengine/godot"
+GH_REPO="https://github.com/godotengine/godot-builds"
+GH_BUILDS_REPO="https://github.com/godotengine/godot-builds/releases/download"
 REPO="https://downloads.tuxfamily.org/godotengine"
 TOOL_NAME="godot"
 TOOL_TEST="godot --version"
@@ -25,11 +26,15 @@ list_github_tags() {
 }
 
 list_all_versions() {
-  echo "$(list_github_tags)"$'\n'"$(list_sub_versions)"
+  list_github_tags
 }
 
 list_stable_versions() {
-  list_github_tags
+  list_github_tags | grep "stable"
+}
+
+latest_stable() {
+  list_stable_versions | sort_versions | tail -n 1
 }
 
 get_sub_versions() {
@@ -66,13 +71,9 @@ download_release() {
   filename="$2"
   release=`echo "$1" | cut -d'-' -f2`
   linux_string="$3"
+  url="$GH_BUILDS_REPO/$1/Godot_v$1_${linux_string}.zip"
 
-  if [[ "$release" == "stable" ]]; then
-    url="$REPO/${version}/Godot_v${version}-${release}_${linux_string}.zip"
-  else
-    url="$REPO/${version}/${release}/Godot_v${version}-${release}_${linux_string}.zip"
-  fi
-  echo "* Downloading $TOOL_NAME release $version-$release..."
+  echo "* Downloading $TOOL_NAME release $1..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
