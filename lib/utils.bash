@@ -99,6 +99,15 @@ install_version() {
     version="$version"
   fi
 
+  case $(uname -s) in
+    Darwin)
+      echo on macos
+      ;;
+    *)
+      echo elsewhere
+      ;;
+  esac
+
   local release_file="$install_path/$TOOL_NAME-$version.zip"
   (
     mkdir -p "$install_path/bin"
@@ -109,7 +118,6 @@ install_version() {
 
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-    xattr -dr com.apple.quarantine $install_path/bin/$tool_cmd
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
 
     echo "$TOOL_NAME $version installation was successful!"
