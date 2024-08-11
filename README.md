@@ -2,7 +2,7 @@
 
 # asdf-godot ![Build](https://github.com/nyrst/asdf-godot/workflows/Build/badge.svg) ![Lint](https://github.com/nyrst/asdf-godot/workflows/Lint/badge.svg)
 
-[godot](https://godotengine.org/) plugin for the [asdf version manager](https://asdf-vm.com).
+[godot](https://godotengine.org/) plugin for the [asdf version manager](https://asdf-vm.com) or for [mise-en-place](https://mise.jdx.dev/).
 
 </div>
 
@@ -22,7 +22,7 @@
 Plugin:
 
 ```shell
-asdf plugin add godot https://github.com/wrn4/asdf-godot.git
+asdf plugin add godot https://github.com/AlexRFox/asdf-godot.git
 ```
 
 godot:
@@ -48,7 +48,7 @@ install & manage versions.
 
 Contributions of any kind welcome! See the [contributing guide](contributing.md).
 
-[Thanks goes to these contributors](https://github.com/nyrst/asdf-godot/graphs/contributors)!
+[Thanks goes to these contributors](https://github.com/AlexRFox/asdf-godot/graphs/contributors)!
 
 # License
 
