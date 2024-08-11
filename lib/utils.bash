@@ -83,10 +83,9 @@ install_version() {
   local platform
   local install_type="$1"
   local version="$2"
-  local install_path=$3
+  local install_path=$(dirname $3)/$(echo $version | cut -d '.' -f 1,2)
   local regex='(alpha|beta|dev|rc)'
 
-  fail $(echo $version | cut -d '.' -f 1,2)
   if [ "$install_type" != "version" ]; then
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
