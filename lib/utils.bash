@@ -86,6 +86,7 @@ install_version() {
   local install_path=$(echo $3 | cut -d '.' -f 1,3)
   local regex='(alpha|beta|dev|rc)'
 
+  fail $3
   if [ "$install_type" != "version" ]; then
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
