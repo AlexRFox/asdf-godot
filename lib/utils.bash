@@ -101,10 +101,10 @@ install_version() {
 
   case $(uname -s) in
     Darwin)
-      echo on macos
+      fail on macos
       ;;
     *)
-      echo elsewhere
+      fail elsewhere
       ;;
   esac
 
