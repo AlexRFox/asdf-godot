@@ -83,7 +83,7 @@ install_version() {
   local platform
   local install_type="$1"
   local version="$2"
-  local install_path="$3"
+  local install_path=$(echo $3 | cut -d '.' -f 1,2)
   local regex='(alpha|beta|dev|rc)'
 
   if [ "$install_type" != "version" ]; then
