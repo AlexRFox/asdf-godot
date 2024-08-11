@@ -72,10 +72,10 @@ download_release() {
   release=`echo "$1" | cut -d'-' -f2`
   platform="$3"
   url="$GH_BUILDS_REPO/$1/Godot_v$1_${platform}.zip"
-  fail $url
 
   echo "* Downloading $TOOL_NAME release $1..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+  fail "foo"
 }
 
 
