@@ -80,6 +80,7 @@ download_release() {
 
 install_version() {
   local linux_string
+  local platform
   local install_type="$1"
   local version="$2"
   local install_path="$3"
