@@ -96,7 +96,7 @@ install_version() {
   fi
 
   if [[ ! $version =~ $regex ]]; then
-    version="$version-stable"
+    version="$version"
   fi
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
