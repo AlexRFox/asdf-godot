@@ -66,12 +66,12 @@ list_sub_versions() {
 
 
 download_release() {
-  local version filename url release linux_string
+  local version filename url release platform
   version=`echo "$1" | cut -d'-' -f1`
   filename="$2"
   release=`echo "$1" | cut -d'-' -f2`
-  linux_string="$3"
-  url="$GH_BUILDS_REPO/$1/Godot_v$1_${linux_string}.zip"
+  platform="$3"
+  url="$GH_BUILDS_REPO/$1/Godot_v$1_${platform}.zip"
 
   echo "* Downloading $TOOL_NAME release $1..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -101,19 +101,19 @@ install_version() {
 
   case $(uname -s) in
     Darwin)
-      echo on macos
+      platform="macos.universal"
       ;;
     *)
-      echo elsewhere
+      platform="$(uname -s | awk '{print tolower($0)}').$(uname -m)"
       ;;
   esac
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
   (
     mkdir -p "$install_path/bin"
-    download_release "$version" "$release_file" "$linux_string"
+    download_release "$version" "$release_file" "$platform"
     unzip -qq "$release_file" -d "$install_path" || fail "Could not extract $release_file"
-    mv "$install_path/Godot_v${version}_${linux_string}" "$install_path/bin/godot"
+    mv "$install_path/Godot_v${version}_${platform}" "$install_path/bin/godot"
     rm "$release_file"
 
     local tool_cmd
