@@ -111,10 +111,8 @@ install_version() {
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
   (
-    echo mkdir -p "$install_path/bin"
     mkdir -p "$install_path/bin"
     download_release "$version" "$release_file" "$platform"
-    fail "$release_file"
     unzip -qq "$release_file" -d "$install_path" || fail "Could not extract $release_file"
     mv "$install_path/Godot_v${version}_${platform}" "$install_path/bin/godot"
     rm "$release_file"
@@ -126,7 +124,7 @@ install_version() {
 
     echo "$TOOL_NAME $version installation was successful!"
   ) || (
-#    rm -rf "$install_path"
+    rm -rf "$install_path"
     fail "An error ocurred while installing $TOOL_NAME $version."
   )
 }
