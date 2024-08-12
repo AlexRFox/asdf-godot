@@ -75,6 +75,7 @@ download_release() {
 
   echo "* Downloading $TOOL_NAME release $1..."
   echo $url
+  echo curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
