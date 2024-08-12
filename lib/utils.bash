@@ -74,7 +74,7 @@ download_release() {
   url="$GH_BUILDS_REPO/$1/Godot_v$1_${platform}.zip"
 
   echo "* Downloading $TOOL_NAME release $1..."
-  echo $filename
+  echo $url
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
