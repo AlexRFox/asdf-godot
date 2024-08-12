@@ -74,8 +74,6 @@ download_release() {
   url="$GH_BUILDS_REPO/$1/Godot_v$1_${platform}.zip"
 
   echo "* Downloading $TOOL_NAME release $1..."
-  echo $url
-  echo curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
@@ -113,6 +111,7 @@ install_version() {
 
   local release_file="$install_path/$TOOL_NAME-$version.zip"
   (
+    echo mkdir -p "$install_path/bin"
     mkdir -p "$install_path/bin"
     download_release "$version" "$release_file" "$platform"
     fail "$release_file"
