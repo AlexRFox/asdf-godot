@@ -113,8 +113,8 @@ install_version() {
   (
     mkdir -p "$install_path/bin"
     download_release "$version" "$release_file" "$platform"
-    unzip -qq "$release_file" -d "$install_path" || fail "Could not extract $release_file"
     fail "$release_file"
+    unzip -qq "$release_file" -d "$install_path" || fail "Could not extract $release_file"
     mv "$install_path/Godot_v${version}_${platform}" "$install_path/bin/godot"
     rm "$release_file"
 
